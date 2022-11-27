@@ -10,6 +10,6 @@ app.use('/', (req, res, next) => {
     });
 });
 
-app.listen(8001, () => {
+app.listen(8003, () => {
     console.log("Shoppinf service is listening on port 8003")
 });

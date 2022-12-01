@@ -3,6 +3,7 @@ const { APIError, BadRequestError, STATUS_CODES } = require('../../utils/app-err
 
 // Dealing with data operations
 class CustomerRepository {
+    
     async CreateCustomer ({ email, password, phone, salt}) {
         try {
             const customer = new CustomerModel ({
@@ -18,5 +19,25 @@ class CustomerRepository {
             throw APIError('API Error', STATUS_CODES.INTERNAL_ERROR, 'Unable to create customer')
         }
     };
+
+    async createAddress ({ _id, street, postalCode, city, country}) {
+        try {
+            const profile = await CustomerModel.findById(_id);
+            if (profile) {
+                const newAddress = new AddressModel ({
+                    street,
+                    postalCode,
+                    city,
+                    country
+                })
+                await newAddress.save();
+                profile.address.push(newAddress);
+            }
+            return await profile.save();
+        } catch (error) {
+            throw APIError('API Error', STATUS_CODES.INTERNAL_ERROR, 'Unable to find customer');
+        }
+    };
+
 
 }

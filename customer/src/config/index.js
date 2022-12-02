@@ -1,14 +1,12 @@
-const dotEnv = require('dotenv');
+const dotenv = require('dotenv');
+dotenv.config();
 
-if (process.env.NODE_ENV !== 'prod') {
-    const configFile =  `./.env.${process.env.NODE_ENV}`;
-    dotEnv.config({ path: configFile});
-} else {
-    dotEnv.config()
-};
+const PORT= process.env.PORT
+const DB_URL= process.env.MONGODB_URI
+const APP_SECRET= process.env.APP_SECRET
 
 module.exports = {
-    PORT: process.env.PORT,
-    DB_URL: process.env.MONGODB_URI,
-    APP_SECRET: process.env.APP_SECRET
+    PORT: PORT,
+    DB_URL: DB_URL,
+    APP_SECRET: APP_SECRET
 };

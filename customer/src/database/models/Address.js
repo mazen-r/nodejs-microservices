@@ -1,6 +1,6 @@
-const mongoose = require('mognoose');
+const mongoose = require('mongoose');
 
-const Schema = mognoose.Schema;
+const Schema = mongoose.Schema;
 
 const AddressSchema = new Schema ({
     street: String,

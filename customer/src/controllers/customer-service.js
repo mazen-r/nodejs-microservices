@@ -40,6 +40,38 @@ class CustomerService {
         }
     };
 
+    async AddNewAddress(_id,userInputs){   
+        const { street, postalCode, city,country} = userInputs;
+        try {
+            const addressResult = await this.repository.CreateAddress({ _id, street, postalCode, city,country})
+            return FormateData(addressResult);
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    };
+
+    async GetProfile(id){
+        try {
+            const existingCustomer = await this.repository.FindCustomerById({id});
+            return FormateData(existingCustomer);
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    };
+
+    async GetShopingDetails(id){
+        try {
+            const existingCustomer = await this.repository.FindCustomerById({id});
+            if(existingCustomer){
+               return FormateData(existingCustomer);
+            }       
+            return FormateData({ msg: 'Error'});
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
+
+
 };
 
 module.exports = CustomerService;

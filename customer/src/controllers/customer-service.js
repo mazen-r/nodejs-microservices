@@ -71,6 +71,42 @@ class CustomerService {
         }
     }
 
+    async GetWishList(customerId){
+        try {
+            const wishListItems = await this.repository.Wishlist(customerId);
+            return FormateData(wishListItems);
+        } catch (err) {
+            throw new APIError('Data Not found', err)           
+        }
+    }
+
+    async AddToWishlist(customerId, product){
+        try {
+            const wishlistResult = await this.repository.AddWishlistItem(customerId, product);        
+           return FormateData(wishlistResult);
+    
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
+
+    async ManageCart(customerId, product, qty, isRemove){
+        try {
+            const cartResult = await this.repository.AddCartItem(customerId, product, qty, isRemove);        
+            return FormateData(cartResult);
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
+
+    async ManageOrder(customerId, order){
+        try {
+            const orderResult = await this.repository.AddOrderToProfile(customerId, order);
+            return FormateData(orderResult);
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
 
 };
 

@@ -64,3 +64,5 @@ const ErrorHandler = async (err, req, res, next) => {
     };
     next();    
 };
+
+module.exports = ErrorHandler;

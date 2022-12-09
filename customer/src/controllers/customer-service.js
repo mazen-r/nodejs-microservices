@@ -69,7 +69,7 @@ class CustomerService {
         } catch (err) {
             throw new APIError('Data Not found', err)
         }
-    }
+    };
 
     async GetWishList(customerId){
         try {
@@ -78,7 +78,7 @@ class CustomerService {
         } catch (err) {
             throw new APIError('Data Not found', err)           
         }
-    }
+    };
 
     async AddToWishlist(customerId, product){
         try {
@@ -88,7 +88,7 @@ class CustomerService {
         } catch (err) {
             throw new APIError('Data Not found', err)
         }
-    }
+    };
 
     async ManageCart(customerId, product, qty, isRemove){
         try {
@@ -106,8 +106,31 @@ class CustomerService {
         } catch (err) {
             throw new APIError('Data Not found', err)
         }
-    }
+    };
 
+    async SubscribeEvents(payload){
+        const { event, data } =  payload;
+        const { userId, product, order, qty } = data;
+
+        switch(event){
+            case 'ADD_TO_WISHLIST':
+            case 'REMOVE_FROM_WISHLIST':
+                this.AddToWishlist(userId,product)
+                break;
+            case 'ADD_TO_CART':
+                this.ManageCart(userId,product, qty, false);
+                break;
+            case 'REMOVE_FROM_CART':
+                this.ManageCart(userId,product,qty, true);
+                break;
+            case 'CREATE_ORDER':
+                this.ManageOrder(userId,order);
+                break;
+            default:
+                break;
+        }
+    };
+    
 };
 
 module.exports = CustomerService;

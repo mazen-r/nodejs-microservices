@@ -1,5 +1,5 @@
 const { createLogger, transports } = require('winston');
-const AppError  = require('./app-errors');
+const { AppError } = require('./app-errors');
 
 const LogErrors = createLogger ({
     transports: [
@@ -26,7 +26,7 @@ class ErrorLogger {
 
     isTrustError (error) {
         if (error instanceof AppError) {
-            return err.isOperational;
+            return error.isOperational;
         } else {
             return false;
         };
@@ -34,7 +34,7 @@ class ErrorLogger {
 };
 
 const ErrorHandler = async (err, req, res, next) => {
-
+    
     const errorLogger = new ErrorLogger();
 
     process.on('uncaughtException', (reason, promise) => {
@@ -62,7 +62,7 @@ const ErrorHandler = async (err, req, res, next) => {
         }
         return res.status(err.statusCode).json({'message': err.message})
     };
-    next();    
+    next();   
 };
 
 module.exports = ErrorHandler;

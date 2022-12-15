@@ -45,4 +45,14 @@ module.exports = (app) => {
         }
     });
 
+    app.get('/shopping-details', UserAuth, async (req, res, next) => {
+        try {
+            const {_id} = req.user
+            const {data} = await service.GetShopingDetails(_id)
+            return res.json(data)
+        } catch (err) {
+            next(err)
+        }
+    });
+
 };

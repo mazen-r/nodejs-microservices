@@ -55,4 +55,13 @@ module.exports = (app) => {
         }
     });
 
+    app.get('/wishlist', UserAuth, async (req, res, next) => {
+        try {
+            const {_id} = req.user
+            const {data} = await service.GetWishList(_id)
+            return res.status(200).json(data)
+        } catch(err) {
+            next(err)
+        }
+    });
 };

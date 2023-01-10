@@ -5,7 +5,7 @@ module.exports = (app) => {
         const { payload } = req.body;
 
         console.log("===============  Products Service Received Event ====== ");
-        return res.status(200).json(payload);
+        return res.status(200).json({ message: 'notified!'});
 
     });
 };

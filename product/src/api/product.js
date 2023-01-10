@@ -1,8 +1,8 @@
 const ProductService = require('../services/product-service');
-const { PublishCustomerEvent, PublishShoppingEvent } = require('../utils');
+const { PublishCustomerEvent, PublishShoppingEvent, PublishMessage } = require('../utils');
 const UserAuth = require('./middlewares/auth')
 
-module.exports = (app) => {
+module.exports = (app, channel) => {
     
     const service = new ProductService();
 
@@ -75,6 +75,11 @@ module.exports = (app) => {
         } catch (err) {
             
         }
+
+        // PublishCustomerEvent(data);
+        
+        PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
+        res.status(200).json(data.data.product);
     });
     
     app.delete('/wishlist/:id',UserAuth, async (req,res,next) => {
@@ -93,6 +98,11 @@ module.exports = (app) => {
         } catch (err) {
             next(err)
         }
+
+        // PublishCustomerEvent(data);
+
+        PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
+        res.status(200).json(data.data.product);        
     });
 
 
@@ -104,8 +114,8 @@ module.exports = (app) => {
 
             const { data } = await  service.GetProductPayload(_id, { productId: req.body._id, qty: req.body.qty },'ADD_TO_CART') 
 
-            PublishCustomerEvent(data);
-            PublishShoppingEvent(data)
+            PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
+            PublishMessage(channel, SHOPPING_SERVICE, JSON.stringify(data));
 
             const response = {
                 product: data.data.product,
@@ -128,8 +138,8 @@ module.exports = (app) => {
 
             const { data } = await  service.GetProductPayload(_id, { productId },'REMOVE_FROM_CART') 
 
-            PublishCustomerEvent(data)
-            PublishShoppingEvent(data)
+            PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
+            PublishMessage(channel, SHOPPING_SERVICE, JSON.stringify(data));
                      
             const response = {
                 product: data.data.product,

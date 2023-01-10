@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt  = require('jsonwebtoken');
 const axios = require('axios');
+const amqplib = require('amqplib');
 
-const { APP_SECRET } = require('../config');
+const { APP_SECRET, BASE_URL, EXCHANGE_NAME } = require('../config');
 
 //Utility functions
 module.exports.GenerateSalt = async() => {
@@ -56,4 +57,22 @@ module.exports.PublishShoppingEvent = async(payload) => {
         axios.post('http://localhost:8000/shopping/app-events', {
                 payload
         });
+};
+
+//Message Broker
+
+module.exports.CreateChannel = async() => {
+        try {
+                const connection = await amqplib.connect('amqp://localhost');
+                const channel = await connection.createChannel();
+                await channel.assertQueue(EXCHANGE_NAME, 'direct' ,{ durable: true});
+                return channel
+        } catch (err) {
+                throw err
+        }
+};
+
+module.exports.PublishMessage = (channel,service,msg, ) => {
+        channel.publish(EXCHANGE_NAME, service, Buffer.from(msg));
+        console.log('Sent: ', msg);
 };

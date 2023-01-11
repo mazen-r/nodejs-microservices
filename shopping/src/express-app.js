@@ -2,7 +2,7 @@ const express = require('express');
 const cors  = require('cors');
 const { shopping, appEvents } = require('./api');
 const HandleErrors = require('./utils/error-handler')
-
+const { CreateChannel } = require('./utils')
 
 module.exports = async (app) => {
 
@@ -11,12 +11,7 @@ module.exports = async (app) => {
     app.use(cors());
     app.use(express.static(__dirname + '/public'))
 
-    //Listener
-    appEvents(app);
+    const channel = await CreateChannel()
 
-    //api
-    shopping(app);
-
-    // error handling
-    app.use(HandleErrors);
+    shopping(app, channel);
 };

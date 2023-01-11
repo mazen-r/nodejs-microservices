@@ -8,5 +8,7 @@ const APP_SECRET= process.env.APP_SECRET
 module.exports = {
     PORT: PORT,
     DB_URL: DB_URL,
-    APP_SECRET: APP_SECRET
+    APP_SECRET: APP_SECRET,
+    CUSTOMER_SERVICE: 'customer_service',
+    SHOPPING_SERVICE: 'shopping_service'    
 };

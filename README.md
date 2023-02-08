@@ -25,11 +25,6 @@ Contains logic of shopping:
   - Payment: POST GET `/id`
    
   
-- Main app built with Flask, Docker, MySQL:  
-
-  - Flask gets products from RabbitMQ via consumer.  
-  - You can Like Products using the Flask APP.  
-
 ----------------------
 
 ### Communication between microservies

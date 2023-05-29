@@ -3,12 +3,9 @@ const mongoose = require('mongoose');
 const { DB_URL } = require('../config');
 
 module.exports = async() => {
-    
     try {
-        await mongoose.connect(DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        mongoose.set("strictQuery", false);
+        await mongoose.connect(DB_URL);
         console.log('Connedted to MongoDB successfully');
         
     } catch (error) {

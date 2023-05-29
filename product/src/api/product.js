@@ -1,6 +1,7 @@
 const ProductService = require('../services/product-service');
 const { PublishCustomerEvent, PublishShoppingEvent, PublishMessage } = require('../utils');
 const UserAuth = require('./middlewares/auth')
+const { CUSTOMER_SERVICE, SHOPPING_SERVICE } = require("../config");
 
 module.exports = (app, channel) => {
     
@@ -110,12 +111,11 @@ module.exports = (app, channel) => {
         
         const { _id } = req.user;
         
-        try {     
+        // try {     
 
             const { data } = await  service.GetProductPayload(_id, { productId: req.body._id, qty: req.body.qty },'ADD_TO_CART') 
 
-            PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
-            PublishMessage(channel, SHOPPING_SERVICE, JSON.stringify(data));
+            PublishCustomerEvent(data);
 
             const response = {
                 product: data.data.product,
@@ -124,9 +124,9 @@ module.exports = (app, channel) => {
     
             return res.status(200).json(response);
             
-        } catch (err) {
-            next(err)
-        }
+        // } catch (err) {
+        //     next(err)
+        // }
     });
     
     app.delete('/cart/:id',UserAuth, async (req,res,next) => {
@@ -139,7 +139,6 @@ module.exports = (app, channel) => {
             const { data } = await  service.GetProductPayload(_id, { productId },'REMOVE_FROM_CART') 
 
             PublishMessage(channel, CUSTOMER_SERVICE, JSON.stringify(data));
-            PublishMessage(channel, SHOPPING_SERVICE, JSON.stringify(data));
                      
             const response = {
                 product: data.data.product,

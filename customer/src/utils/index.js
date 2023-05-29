@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const amqplib = require('amqplib');
 
-const { APP_SECRET, EXCHANGE_NAME, CUSTOMER_SERVICE } = require('../config');
+const { APP_SECRET, EXCHANGE_NAME, CUSTOMER_SERVICE, MSG_QUEUE_HOST } = require('../config');
 
 // Util functions
 
@@ -46,7 +46,7 @@ module.exports.FormateData = (data) => {
 //Message Broker
 module.exports.CreateChannel = async() => {
     try {
-            const connection = await amqplib.connect('amqp://localhost');
+            const connection = await amqplib.connect(`amqp://${MSG_QUEUE_HOST}`);
             const channel = await connection.createChannel();
             await channel.assertQueue(EXCHANGE_NAME, 'direct' ,{ durable: true});
             return channel

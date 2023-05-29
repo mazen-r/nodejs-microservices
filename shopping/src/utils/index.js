@@ -3,7 +3,7 @@ const jwt  = require('jsonwebtoken');
 const axios = require('axios');
 const amqplib = require("amqplib");
 
-const { APP_SECRET, EXCHANGE_NAME, SHOPPING_SERVICE } = require('../config');
+const { APP_SECRET, EXCHANGE_NAME, SHOPPING_SERVICE, MSG_QUEUE_HOST } = require('../config');
 
 //Utility functions
 module.exports.GenerateSalt = async() => {
@@ -50,7 +50,7 @@ module.exports.FormateData = (data) => {
 
 module.exports.CreateChannel = async () => {
         try {
-          const connection = await amqplib.connect("amqp://localhost");
+          const connection = await amqplib.connect(`amqp://${MSG_QUEUE_HOST}`);
           const channel = await connection.createChannel();
           await channel.assertQueue(EXCHANGE_NAME, "direct", { durable: true });
           return channel;

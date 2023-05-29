@@ -1,12 +1,18 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const PORT= process.env.PORT
-const DB_URL= process.env.MONGODB_URI
-const APP_SECRET= process.env.APP_SECRET
+const PORT = process.env.PORT
+const DB_URL = process.env.MONGO_URL
+const APP_SECRET = process.env.APP_SECRET
+const MSG_QUEUE_HOST = process.env.MSG_QUEUE_HOST
+const EXCHANGE_NAME = process.env.EXCHANGE_NAME
+const CUSTOMER_SERVICE = "customer_service"
 
 module.exports = {
     PORT: PORT,
     DB_URL: DB_URL,
-    APP_SECRET: APP_SECRET
+    APP_SECRET: APP_SECRET,
+    MSG_QUEUE_HOST: MSG_QUEUE_HOST,
+    EXCHANGE_NAME: EXCHANGE_NAME,
+    CUSTOMER_SERVICE: CUSTOMER_SERVICE,
 };

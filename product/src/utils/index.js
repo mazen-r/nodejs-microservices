@@ -3,7 +3,7 @@ const jwt  = require('jsonwebtoken');
 const axios = require('axios');
 const amqplib = require('amqplib');
 
-const { APP_SECRET, BASE_URL, EXCHANGE_NAME } = require('../config');
+const { APP_SECRET, EXCHANGE_NAME, MSG_QUEUE_HOST } = require('../config');
 
 //Utility functions
 module.exports.GenerateSalt = async() => {
@@ -24,17 +24,12 @@ module.exports.GenerateSignature = async (payload) => {
 }, 
 
 module.exports.ValidateSignature  = async(req) => {
-
         const signature = req.get('Authorization');
-
-        console.log(signature);
-        
         if(signature){
             const payload = await jwt.verify(signature.split(' ')[1], APP_SECRET);
             req.user = payload;
             return true;
         }
-
         return false
 };
 
@@ -47,14 +42,13 @@ module.exports.FormateData = (data) => {
     };
 
 module.exports.PublishCustomerEvent = async(payload) => {
-        
-        axios.post('http://localhost:8000/customer/app-events', {
+        axios.post('http://localhost:8001/app-events', {
                 payload
         });
 };
 
 module.exports.PublishShoppingEvent = async(payload) => {
-        axios.post('http://localhost:8000/shopping/app-events', {
+        axios.post('http://localhost:8003/app-events', {
                 payload
         });
 };
@@ -63,7 +57,7 @@ module.exports.PublishShoppingEvent = async(payload) => {
 
 module.exports.CreateChannel = async() => {
         try {
-                const connection = await amqplib.connect('amqp://localhost');
+                const connection = await amqplib.connect(`amqp://${MSG_QUEUE_HOST}`);
                 const channel = await connection.createChannel();
                 await channel.assertQueue(EXCHANGE_NAME, 'direct' ,{ durable: true});
                 return channel

@@ -1,10 +1,10 @@
 const ShoppingService = require("../services/shopping-service");
-const { PublishCustomerEvent } = require("../utils");
+const { PublishCustomerEvent, SubscribeMessage } = require("../utils");;
 const UserAuth = require('./middlewares/auth');
 const { CUSTOMER_SERVICE } = require('../config');
 const { PublishMessage } = require('../utils')
 
-module.exports = (app) => {
+module.exports = (app, channel) => {
     
     const service = new ShoppingService();
 

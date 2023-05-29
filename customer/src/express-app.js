@@ -13,5 +13,7 @@ module.exports = async (app) => {
 
     const channel = await CreateChannel()
 
+    appEvents(app);
+
     customer(app, channel);
 };

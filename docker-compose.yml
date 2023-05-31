@@ -1,13 +1,17 @@
 version: "3"
 services:
-  nosql-db:
+  mongodb:
     image: mongo
     ports:
-      - "27018:27017"
-    container_name: nosql-db
-    volumes:
-      - ./db/:/data/db
-  products:
+      - "27017:27017"   
+    container_name: mongodb   
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"     
+    container_name: rabbitmq            
+  product:
     build:
       dockerfile: Dockerfile
       context: ./product
@@ -16,13 +20,13 @@ services:
       - "8002:8002"
     restart: always
     depends_on:
-      - "nosql-db"
+      - rabbitmq    
+      - mongodb
     volumes:
       - .:/app
-      - /app/products/node_modules
-
+      - /app/product/node_modules
     env_file:
-      - ./products/.env.dev
+      - ./product/.env      
   shopping:
     build:
       dockerfile: Dockerfile
@@ -31,13 +35,14 @@ services:
     ports:
       - "8003:8003"
     restart: always
-    depends_on:
-      - "nosql-db"
     volumes:
       - .:/app
       - /app/shopping/node_modules
+    depends_on:
+      - rabbitmq    
+      - mongodb       
     env_file:
-      - ./shopping/.env.dev
+      - ./shopping/.env      
   customer:
     build:
       dockerfile: Dockerfile
@@ -46,20 +51,20 @@ services:
     ports:
       - "8001:8001"
     restart: always
-    depends_on:
-      - "nosql-db"
-
     volumes:
       - .:/app/
       - /app/customer/node_modules
+    depends_on:
+      - rabbitmq    
+      - mongodb         
     env_file:
-      - ./customer/.env.dev
+      - ./customer/.env    
   nginx-proxy:
     build:
       dockerfile: Dockerfile
       context: ./proxy
     depends_on:
-      - products
+      - product
       - shopping
       - customer
     ports:

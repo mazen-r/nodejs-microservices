@@ -47,6 +47,7 @@ module.exports.FormateData = (data) => {
 module.exports.CreateChannel = async() => {
     try {
             const connection = await amqplib.connect(`amqp://${MSG_QUEUE_HOST}`);
+            console.log(connection)
             const channel = await connection.createChannel();
             await channel.assertQueue(EXCHANGE_NAME, 'direct' ,{ durable: true});
             return channel

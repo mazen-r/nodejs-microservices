@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt  = require('jsonwebtoken');
-const axios = require('axios');
 const amqplib = require("amqplib");
 
 const { APP_SECRET, EXCHANGE_NAME, SHOPPING_SERVICE, MSG_QUEUE_HOST } = require('../config');

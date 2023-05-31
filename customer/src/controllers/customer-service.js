@@ -1,14 +1,14 @@
 const { CustomerRepository } = require("../database");
 const { FormateData, GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } = require('../utils');
-const { APIError, BadRequestError } = require('../utils/app-errors')
+const { APIError } = require('../utils/app-errors')
 
 
-// All Business logic will be here
 class CustomerService {
 
     constructor(){
         this.repository = new CustomerRepository();
-    }
+    };
+
     async SignIn(userInputs){
         const { email, password } = userInputs;
         try {
@@ -23,7 +23,7 @@ class CustomerService {
             return FormateData(null);
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async SignUp(userInputs){
@@ -37,7 +37,7 @@ class CustomerService {
             return FormateData({id: existingCustomer._id, token });
         }catch(err){
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async AddNewAddress(_id,userInputs){   
@@ -47,7 +47,7 @@ class CustomerService {
             return FormateData(addressResult);
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async GetProfile(id){
@@ -56,7 +56,7 @@ class CustomerService {
             return FormateData(existingCustomer);
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async GetShopingDetails(id){
@@ -64,11 +64,11 @@ class CustomerService {
             const existingCustomer = await this.repository.FindCustomerById({id});
             if(existingCustomer){
                return FormateData(existingCustomer);
-            }       
+            };
             return FormateData({ msg: 'Error'});
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async GetWishList(customerId){
@@ -77,17 +77,16 @@ class CustomerService {
             return FormateData(wishListItems);
         } catch (err) {
             throw new APIError('Data Not found', err)           
-        }
+        };
     };
 
     async AddToWishlist(customerId, product){
         try {
             const wishlistResult = await this.repository.AddWishlistItem(customerId, product);        
            return FormateData(wishlistResult);
-    
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async ManageCart(customerId, product, qty, isRemove){
@@ -96,8 +95,8 @@ class CustomerService {
             return FormateData(cartResult);
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
-    }
+        };
+    };
 
     async ManageOrder(customerId, order){
         try {
@@ -105,14 +104,12 @@ class CustomerService {
             return FormateData(orderResult);
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        };
     };
 
     async SubscribeEvents(payload){
         console.log(payload)
         console.log('Triggering.... Customer Events')
-        // payload = JSON.parse(payload)
-        // console.log(payload)
         const { event, data } =  payload;
         const { userId, product, order, qty } = data;
 
@@ -134,7 +131,6 @@ class CustomerService {
                 break;
         }
     };
-    
 };
 
 module.exports = CustomerService;

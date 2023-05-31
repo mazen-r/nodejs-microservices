@@ -54,7 +54,6 @@ module.exports.PublishShoppingEvent = async(payload) => {
 };
 
 //Message Broker
-
 module.exports.CreateChannel = async() => {
         try {
                 const connection = await amqplib.connect(`amqp://${MSG_QUEUE_HOST}`);
@@ -63,7 +62,7 @@ module.exports.CreateChannel = async() => {
                 return channel
         } catch (err) {
                 throw err
-        }
+        };
 };
 
 module.exports.PublishMessage = (channel,service,msg, ) => {

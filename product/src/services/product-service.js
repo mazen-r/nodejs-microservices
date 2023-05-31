@@ -6,7 +6,7 @@ class ProductService {
 
     constructor(){
         this.repository = new ProductRepository();
-    }
+    };
 
     async CreateProduct(productInputs){
         try{
@@ -14,27 +14,23 @@ class ProductService {
             return FormateData(productResult);
         }catch(err){
             throw new APIError('Data Not found')
-        }
+        };
     };
     
     async GetProducts(){
         try{
             const products = await this.repository.Products();
-    
             let categories = {};
-    
             products.map(({ type }) => {
                 categories[type] = type;
             });
-            
             return FormateData({
                 products,
                 categories:  Object.keys(categories) ,
-            })
-
+            });
         }catch(err){
             throw new APIError('Data Not found')
-        }
+        };
     };
 
     async GetProductDescription(productId){
@@ -43,7 +39,7 @@ class ProductService {
             return FormateData(product)
         } catch (err) {
             throw new APIError('Data Not found')
-        }
+        };
     };
 
     async GetProductsByCategory(category){
@@ -52,8 +48,7 @@ class ProductService {
             return FormateData(products)
         } catch (err) {
             throw new APIError('Data Not found')
-        }
-
+        };
     };
 
     async GetSelectedProducts(selectedIds){
@@ -62,7 +57,7 @@ class ProductService {
             return FormateData(products);
         } catch (err) {
             throw new APIError('Data Not found')
-        }
+        };
     };
 
     async GetProductById(productId){
@@ -70,13 +65,11 @@ class ProductService {
             return await this.repository.FindById(productId);
         } catch (err) {
             throw new APIError('Data Not found')
-        }
+        };
     };
 
     async GetProductPayload(userId, { productId, qty}, event) {
-        
         const product = await this.repository.FindById(productId);
-
         if(product){
             const payload = {
                 event: event,
@@ -85,9 +78,8 @@ class ProductService {
             return FormateData(payload)
         }else{
             return FormateData({error: 'No product available'})
-        }
-
-    }
+        };
+    };
 };
 
 module.exports = ProductService;
